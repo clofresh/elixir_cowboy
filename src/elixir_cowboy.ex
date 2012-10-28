@@ -46,7 +46,7 @@ defmodule :elixir_cowboy_sup do
 	@behavior :supervisor
 
 	def start_link() do
-		Supervisor.start_link({:local, :elixir_cowboy_sup}, :elixir_cowboy_sup, [])
+		:supervisor.start_link({:local, :elixir_cowboy_sup}, :elixir_cowboy_sup, [])
 	end
 
 	def init([]) do
