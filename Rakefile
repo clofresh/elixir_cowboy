@@ -12,6 +12,6 @@ task :dependencies do
 end
 
 task :start do
-	sh "erl -pa ebin/ -pa deps/*/ebin/ -s elixir_cowboy"
+	sh "elixir --erl 'erl -pa ebin/ -pa deps/*/ebin/ -s elixir_cowboy' --no-halt"
 end
 
