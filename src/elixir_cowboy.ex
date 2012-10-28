@@ -2,17 +2,20 @@ defmodule :elixir_cowboy do
 	@behavior :application
 
 	def start() do
-		Erlang.application.start(:cowboy)
-		Erlang.application.start(:elixir_cowboy)		
+		IO.puts("Starting up")
+		:application.start(:crypto)
+		:application.start(:ranch)
+		:application.start(:cowboy)
+		:application.start(:elixir_cowboy)		
 	end
 
 	def start(_type, _args) do
 		dispatch = [
 			{:'_', [{:'_', :elixir_cowboy_handler, []}]}
 		] 
-		Erlang.cowboy.start_listener(:my_http_listener, 100,
-			:cowboy_tcp_transport, [{:port, 8080}],
-			:cowboy_http_protocol, [{:dispatch, dispatch}]
+		:cowboy.start_http(:my_http_listener, 100,
+			[{:port, 8080}],
+			[{:dispatch, dispatch}]
 		)
 	end
 
@@ -29,7 +32,7 @@ defmodule :elixir_cowboy_handler do
 	end
 
 	def handle(req, state) do
-		{:ok, req2} = Erlang.cowboy_http_req.reply(200, [], "Hello world!", req)
+		{:ok, req2} = :cowboy_req.reply(200, [], "Hello world!", req)
 		{:ok, req2, state}
 	end
 
@@ -43,7 +46,7 @@ defmodule :elixir_cowboy_sup do
 	@behavior :supervisor
 
 	def start_link() do
-		Erlang.supervisor.start_link({:local, :elixir_cowboy_sup}, :elixir_cowboy_sup, [])
+		Supervisor.start_link({:local, :elixir_cowboy_sup}, :elixir_cowboy_sup, [])
 	end
 
 	def init([]) do
